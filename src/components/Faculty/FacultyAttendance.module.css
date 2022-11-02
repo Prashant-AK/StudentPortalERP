@@ -1,0 +1,8 @@
+.MainContainer {
+  background-color: #eaf4ff !important;
+  height: 100vh;
+}
+.SubContainer {
+  margin-left: 270px;
+  padding-top: 2rem;
+}

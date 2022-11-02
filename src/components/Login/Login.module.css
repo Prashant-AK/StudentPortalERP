@@ -1,0 +1,57 @@
+.loginBtnContainer {
+  margin: 1rem 0rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loginBtn {
+  border-radius: 15px;
+  padding: 1rem 0rem;
+  background-color: #fd8473;
+  border: #fd8473;
+  width: 100%;
+  font-weight: bolder;
+}
+.loginFormContainer {
+  margin-top: auto;
+  margin-bottom: auto;
+  height: auto;
+  padding: 4rem;
+}
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loginImg {
+  max-width: 50vw;
+}
+
+.formInputs {
+  border-radius: 10px;
+}
+
+@media screen and (min-width: 1440px) {
+  .loginImg {
+    max-width: 50vw;
+    height: auto;
+  }
+}
+@media screen and (min-width: 1620px) {
+  .loginImg {
+    max-width: 43vw;
+    height: auto;
+  }
+}
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) {
+  /* For portrait layouts only */
+  .loginFormContainer {
+    margin-top: auto;
+    margin-bottom: auto;
+    height: auto;
+    padding: 2rem;
+  }
+}

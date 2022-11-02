@@ -1,0 +1,55 @@
+/* Attendance Detail */
+.main {
+  background-color: #eaf4ff;
+}
+
+.topHead {
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-right: 0.25rem;
+}
+
+.topContent {
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.topContentContainer {
+  margin: -1rem 0rem 0rem 2rem;
+}
+.contentContainer {
+  background-color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchIconContainer {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  width: 3rem;
+  height: 2.5rem;
+  background-color: #ef3a3a;
+  color: white;
+}
+.StudentTable {
+  width: 100%;
+  height: auto;
+  padding-top: 1rem;
+  margin: 1rem auto;
+}
+/* .select {
+  width: 12rem;
+  height: 2.5rem;
+  border-radius: 1rem;
+  font-size: 1rem;
+  margin-right: 1rem;
+} */
+.searchIcon {
+  margin: auto;
+}
+.dateArrowIcon {
+  background-color: transparent;
+  border: none;
+}

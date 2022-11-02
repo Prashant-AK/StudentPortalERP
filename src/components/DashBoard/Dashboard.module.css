@@ -1,0 +1,58 @@
+.QRmain_container {
+  /* margin-top: 2rem; */
+  /* margin-right: 3rem; */
+  /* margin-left: 3rem; */
+  /* width: auto; */
+  /* height: auto; */
+  /* background-color: #f5fafd; */
+  /* border-radius: 30px; */
+}
+#QR_text {
+  font-size: 1.3rem;
+  margin-top: 2px;
+}
+.cards {
+  margin-top: 2rem;
+  background-color: #fd8473;
+  border-radius: 35px;
+}
+.button {
+  background-color: #fd8473;
+  color: #fff;
+  padding: 0.5rem 2rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  margin: 1rem 1rem;
+  width: 50%;
+  text-align: center;
+}
+
+.cardCol {
+  background-color: '#f5fafd';
+  margin: 0rem 1rem;
+  border-radius: 20px;
+  padding: 1rem;
+}
+.cardIcon {
+  margin-top: 7px;
+  height: 25px;
+  width: 25px;
+  margin-right: 0.5rem;
+}
+.QR_form_inputs {
+  height: 4rem;
+  border-radius: 20px;
+}
+.QRbtn {
+  margin-top: 2.5rem;
+  /* margin-left: 4rem; */
+  font-size: large;
+  border: none;
+  width: 15vw;
+  height: 4rem;
+  background-color: #fd8473;
+  color: #fff;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+}

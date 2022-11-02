@@ -1,0 +1,18 @@
+.container {
+  background-color: #eaf4ff;
+  height: 100vh;
+}
+
+.subContainer {
+  margin: 0px 30px 20px 270px;
+  height: 100%;
+}
+
+.button {
+  background-color: #fd8473;
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.5rem;
+  margin: 0rem 1rem;
+}

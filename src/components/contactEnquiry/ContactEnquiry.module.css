@@ -1,0 +1,47 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins);
+
+.container {
+  padding: 1.5rem;
+}
+
+.topContentContainer {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.5rem;
+  margin: -1rem 0rem 2rem 2rem;
+}
+
+.topHead {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-right: 0.25rem;
+}
+
+.topContent {
+  font-weight: bolder;
+  font-size: large;
+}
+
+.contentContainer {
+  margin: 2rem 0rem 2rem 2rem;
+}
+.modalForm {
+  margin-top: -0.5rem;
+  margin-left: 2rem;
+  width: 80%;
+}
+.modalFooter {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0rem 0rem 2rem;
+}
+
+.modalButton {
+  background-color: #fd8473;
+  border: none;
+  border-radius: 10px;
+  width: 15vw;
+  font-size: large;
+  font-weight: 400;
+  margin-right: 1rem;
+}
