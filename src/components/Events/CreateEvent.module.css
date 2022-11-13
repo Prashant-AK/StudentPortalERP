@@ -47,3 +47,9 @@
   margin-right: 1rem;
   width: 140px;
 }
+.date_picker input,
+span {
+  color: black !important;
+  /* font-size: large  !important; */
+  /* font-weight: 700 !important; */
+}

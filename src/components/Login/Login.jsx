@@ -41,7 +41,13 @@ const Login = () => {
               justifyContent: 'center',
             }}
           >
-            <img src={LoginImg} className={classes.loginImg}></img>
+            <div
+              className={classes.loginImg}
+              // style={{ border: '1px solid tomato' }}
+            >
+              <img src={LoginImg} width="100%" alt="Login" />
+            </div>
+            {/* <img src={LoginImg} className={classes.loginImg} alt="Login" /> */}
           </Col>
 
           <Col

@@ -18,33 +18,33 @@ const OTP = () => {
   };
   return (
     <>
-      <Container className={classes.mainContainer}>
-        <Row className="justify-content-center">
+      <div className={classes.mainContainer}>
+        <Row>
           <Col
             style={{
               display: 'flex',
               justifyContent: 'center',
             }}
           >
-            <img src={OTPimg} id="OTPimg"></img>
+            <div className={classes.loginImg}>
+              <img src={OTPimg} width="100%" alt="Login" />
+            </div>
           </Col>
 
           <Col
-            className="col"
-            id="OTPForm_container"
-            style={{ border: 'solid', borderColor: '#eeeeee' }}
+            className={classes.loginFormContainer}
+            style={{ border: 'solid', borderColor: '#B0CAE5' }}
           >
-            <div className="OTP_formImg">
-              <ReactRoundedImage
-                image={OTPimg}
-                roundedColor="#321124"
-                imageWidth="120"
-                imageHeight="120"
-                roundedSize="1"
-                borderRadius="70"
-              />
-            </div>
-            <div id="OTPform_heading">
+            <ReactRoundedImage
+              image={OTPimg}
+              roundedColor="#321124"
+              imageWidth="100"
+              imageHeight="100"
+              roundedSize="0"
+              borderRadius="70"
+            />
+
+            <div id="form_heading">
               <h3>OTP Verification</h3>
               <h6 style={{ color: 'gray' }}>
                 Enter the OTP sent to your email address<br></br>
@@ -75,7 +75,7 @@ const OTP = () => {
             </div>
           </Col>
         </Row>
-      </Container>
+      </div>
     </>
   );
 };

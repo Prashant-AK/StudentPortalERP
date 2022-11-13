@@ -1,70 +1,80 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Col, Row, Form } from 'react-bootstrap';
-import Multiselect from 'multiselect-react-dropdown';
 
 import classes from './UploadSchedule.module.css';
 import Banner from '../topBar/HeaderBanner/Banner';
 
-const SUBJECT = [
-  { name: 'Option 1️', id: 1 },
-  { name: 'Option 2️', id: 2 },
-  { name: 'Option 3', id: 3 },
-];
-
-const multiselectStyle = {
-  multiselectContainer: {
-    // To change css for multiselect (Width,height,etc..)
-    // ....
-  },
-  searchBox: {
-    // To change search box element look
-    border: 'none',
-    // fontSize: "10px",
-    // minHeight: "50px"
-  },
-  inputField: {
-    // To change input field position or margin
-    margin: '5px',
-  },
-  chips: {
-    // To change css chips(Selected options)
-    background: 'red',
-  },
-  optionContainer: {
-    // To change css for option container
-    border: '2px solid',
-  },
-  option: {
-    // To change css for dropdown options
-    color: 'blue',
-  },
-  groupHeading: {
-    // To chanage group heading style
-    // ....
-  },
+const initialState = {
+  Course: '',
+  Course_class: '',
+  File: {},
+  Title: '',
 };
 
 function UploadSchedule() {
   //
-  const [validated, setValidated] = useState(false);
+
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
+  const [errors, setErrors] = useState({});
+  const [formValues, setFormValues] = useState(initialState);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    if (!!errors[name]) setErrors({ ...errors, [name]: null });
   };
-  function onSelect(selectedList, selectedItem) {
-    // ...
-  }
+  const validateForm = () => {
+    const { Course, Course_class, File, Title } = formValues;
+    const newError = {};
 
-  function onRemove(selectedList, removedItem) {
-    // ...
-  }
+    if (!Course || Course === '') newError.Course = 'Please select Course';
+    if (!Course_class || Course_class === '')
+      newError.Course_class = 'Please select class';
+    if (!Title || Title === '') newError.Title = 'Please enter Title.';
+
+    return newError;
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+    } else {
+      const formData = new FormData();
+      await Promise.all(
+        Object.keys(formValues).map(async (ele) => {
+          await formData.append(ele, formValues[ele]);
+        })
+      );
+
+      Object.keys(formValues).map((ele) => {
+        console.log(
+          'formValues values are for key',
+          ele,
+          ' ',
+          formData.get(ele)
+        );
+      });
+    }
+    // if (form.checkValidity() === false) {
+    // console.log('errrorrr');
+    // alert('Please fill all the fields');
+    // } else {
+    // setValidated(true);
+
+    // await dispatch(
+    //   adminThunk.createEvent({ ...formValues, file: uploadImage })
+    // );
+
+    // console.log(
+    //   'submit form ',
+    //   // file: uploadImage,
+    //   form_Data.get('')
+    // );
+    // navigate('/events');
+    // }
+  };
+  const { Course, Course_class, File, Title } = formValues;
   return (
     <>
       <Banner style={{ height: '6rem', display: 'flex', alignItems: 'center' }}>
@@ -79,27 +89,47 @@ function UploadSchedule() {
 
       <div className={classes.container}>
         <div className={classes.subContainer}>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate onSubmit={handleSubmit}>
             <Col className="d-grid gap-3" style={{ paddingTop: '2rem' }}>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="Course">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
+                  name="Course"
+                  onChange={handleChange}
+                  value={Course}
+                  isInvalid={!!errors?.Course}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select Course</option>
-                  <option value="1">B.Tech</option>
-                  <option value="2">M.Tech</option>
-                </select>
+                  <option defaultValue="">Select Course</option>
+                  <option value="B.Tech">B.Tech</option>
+                  <option value="M.Tech">M.Tech</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.Course}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="Course_class">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
+                  name="Course_class"
+                  onChange={handleChange}
+                  value={Course_class}
+                  isInvalid={!!errors?.Course_class}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select Class</option>
-                  <option value="1">CSE-I</option>
-                  <option value="2">CSE-II</option>
-                </select>
+                  <option defaultValue="">Select Class</option>
+                  <option value="CSE1">CSE-I</option>
+                  <option value="CSE2">CSE-II</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.Course_class}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="formFile" className="w-50">
                 <Form.Label>Upload Schedule</Form.Label>
@@ -132,9 +162,14 @@ function UploadSchedule() {
                   required
                   type="text"
                   placeholder="Enter Title"
-                  // defaultValue="Mark"
+                  name="Title"
+                  value={Title}
+                  onChange={handleChange}
+                  isInvalid={!!errors?.Title}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.Title}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 

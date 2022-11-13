@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import { customAlphabet } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,30 +31,91 @@ const initialState = {
 function StudentProfileForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState(initialState);
+
+  const [formValues, setformValues] = useState(initialState);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setformValues({ ...formValues, [name]: value });
+    if (!!errors[name]) setErrors({ ...errors, [name]: null });
   };
 
+  const validateForm = () => {
+    const {
+      student_name,
+      student_course,
+      student_class,
+      student_semester,
+      student_contact_number,
+      student_email,
+      student_home_address,
+      student_city,
+      father_name,
+      father_email,
+      father_contact_number,
+      father_city,
+    } = formValues;
+    const newError = {};
+    if (!student_name || student_name === '')
+      newError.student_name = 'Please enter name.';
+    if (!father_name || father_name === '')
+      newError.father_name = 'Please enter name.';
+    if (!student_course || student_course === '')
+      newError.student_course = 'Please select course';
+    if (!student_class || student_class === '')
+      newError.student_class = 'Please select class';
+    if (!student_semester || student_semester === '')
+      newError.student_semester = 'Please select semester';
+    if (!student_city || student_city === '')
+      newError.student_city = 'Please select city.';
+    if (!father_city || father_city === '')
+      newError.father_city = 'Please select city.';
+    if (!student_contact_number || student_contact_number === '')
+      newError.student_contact_number = 'Please enter contact number';
+    if (!father_contact_number || father_contact_number === '')
+      newError.father_contact_number = 'Please enter contact number';
+    if (!student_home_address || student_home_address === '')
+      newError.student_home_address = 'Please enter address.';
+    if (!student_email || student_email === '')
+      newError.student_email = 'Please enter email.';
+    if (!father_email || father_email === '')
+      newError.father_email = 'Please enter email.';
+
+    return newError;
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-      alert('Please fill all the fields');
+    const formErrors = validateForm();
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
     } else {
-      setValidated(true);
-      await dispatch(adminThunk.createStudent(formData));
-      console.log('form Submit', formData);
-      alert('Student Successfully Created');
-      setFormData(initialState);
-      navigate('/student-profile');
     }
+
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+
+    // }
+    // if (form.checkValidity() === false) {
+    // console.log('errrorrr');
+    // alert('Please fill all the fields');
+    // } else {
+    // setValidated(true);
+
+    // await dispatch(
+    //   adminThunk.createEvent({ ...formValues, file: uploadImage })
+    // );
+
+    // console.log(
+    //   'submit form ',
+    //   // file: uploadImage,
+    //   form_Data.get('')
+    // );
+    // navigate('/events');
+    // }
   };
 
   const {
@@ -72,7 +132,7 @@ function StudentProfileForm() {
     father_email,
     father_contact_number,
     father_city,
-  } = formData;
+  } = formValues;
 
   return (
     <>
@@ -88,9 +148,9 @@ function StudentProfileForm() {
 
       <div className={classes.container}>
         <div className={classes.subContainer}>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate onSubmit={handleSubmit}>
             <Col className="d-grid gap-3" style={{ paddingTop: '2rem' }}>
-              <Form.Group className="w-50" controlId="validationCustom01">
+              <Form.Group className="w-50" controlId="student_name">
                 <Form.Label>Full Name</Form.Label>
                 <Form.Control
                   required
@@ -99,43 +159,51 @@ function StudentProfileForm() {
                   name="student_name"
                   value={student_name}
                   onChange={handleChange}
-                  // defaultValue="Mark"
+                  isInvalid={!!errors?.student_name}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_name}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="w-50" controlId="validationCustom02">
                 <Form.Label>Student ID</Form.Label>
-                <Form.Control
-                  // disabled
-                  // type="number"
-                  name="student_id"
-                  value={student_id}
-                />
+                <Form.Control name="student_id" value={student_id} />
               </Form.Group>
-
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="student_course">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
                   name="student_course"
                   onChange={handleChange}
                   value={student_course}
+                  isInvalid={!!errors?.student_course}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select student_course</option>
+                  <option defaultValue="">Select Course</option>
                   <option value="BTECH">B Tech</option>
                   <option value="MBA">MBA</option>
                   <option value="B COM">B COM</option>
                   <option value="BCA">BCA</option>
-                </select>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_course}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="student_class">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
                   name="student_class"
                   onChange={handleChange}
+                  value={student_class}
+                  isInvalid={!!errors?.student_class}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select Class</option>
+                  <option defaultValue="">Select Class</option>
                   <option value="Class 1">Class 1</option>
                   <option value="Class 2">Class 2</option>
                   <option value="Class 3">Class 3</option>
@@ -145,16 +213,24 @@ function StudentProfileForm() {
                   <option value="Class 7">Class 7</option>
                   <option value="Class 8">Class 8</option>
                   <option value="Class 9">Class 9</option>
-                </select>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_class}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="student_semester">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
                   name="student_semester"
                   onChange={handleChange}
+                  value={student_semester}
+                  isInvalid={!!errors?.student_semester}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select Semester</option>
+                  <option defaultValue="">Select Semester</option>
                   <option value="Semester 1">Semester I</option>
                   <option value="Semester 2">Semester II</option>
                   <option value="Semester 3">Semester III</option>
@@ -163,7 +239,10 @@ function StudentProfileForm() {
                   <option value="Semester 6">Semester VI</option>
                   <option value="Semester 7">Semester VII</option>
                   <option value="Semester 8">Semester VIII</option>
-                </select>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_semester}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col className="d-grid gap-3" style={{ paddingTop: '2rem' }}>
@@ -178,8 +257,11 @@ function StudentProfileForm() {
                   name="student_contact_number"
                   value={student_contact_number}
                   onChange={handleChange}
+                  isInvalid={!!errors?.student_contact_number}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_contact_number}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="w-50" controlId="validationCustom02">
@@ -191,8 +273,11 @@ function StudentProfileForm() {
                   name="student_email"
                   value={student_email}
                   onChange={handleChange}
+                  isInvalid={!!errors?.student_email}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_email}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="w-50" controlId="validationCustom03">
                 <Form.Label>Home Address</Form.Label>
@@ -203,24 +288,33 @@ function StudentProfileForm() {
                   name="student_home_address"
                   value={student_home_address}
                   onChange={handleChange}
+                  isInvalid={!!errors?.student_home_address}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide a valid Address.
+                  {errors?.student_home_address}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="student_city">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
                   name="student_city"
                   onChange={handleChange}
+                  value={student_city}
+                  isInvalid={!!errors?.student_city}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select City</option>
+                  <option defaultValue="">Assign City</option>
                   <option value="Bareilly">Bareilly</option>
                   <option value="Kanupur">Kanpur</option>
                   <option value="Delhi">Delhi</option>
                   <option value="Noida">Noida</option>
-                </select>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.student_city}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
@@ -235,9 +329,11 @@ function StudentProfileForm() {
                   name="father_name"
                   value={father_name}
                   onChange={handleChange}
-                  // defaultValue="Mark"
+                  isInvalid={!!errors?.father_name}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.father_name}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="w-50" controlId="validationCustom02">
@@ -249,9 +345,11 @@ function StudentProfileForm() {
                   name="father_contact_number"
                   value={father_contact_number}
                   onChange={handleChange}
-                  // defaultValue="Otto"
+                  isInvalid={!!errors?.father_contact_number}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.father_contact_number}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="w-50" controlId="validationCustom02">
@@ -263,23 +361,33 @@ function StudentProfileForm() {
                   name="father_email"
                   value={father_email}
                   onChange={handleChange}
-                  // defaultValue="Otto"
+                  isInvalid={!!errors?.father_email}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.father_email}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="father_city">
+                <Form.Control
                   className="form-select form-select-md mb-0"
                   aria-label=".form-select-lg example"
                   name="father_city"
                   onChange={handleChange}
+                  value={father_city}
+                  isInvalid={!!errors?.father_city}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select City</option>
+                  <option defaultValue="">Assign City</option>
                   <option value="Bareilly">Bareilly</option>
                   <option value="Kanupur">Kanpur</option>
                   <option value="Delhi">Delhi</option>
                   <option value="Noida">Noida</option>
-                </select>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.father_city}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Row className="w-50" style={{ margin: '2rem 0rem' }}>

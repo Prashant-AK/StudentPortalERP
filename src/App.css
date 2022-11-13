@@ -416,6 +416,64 @@ main {
   margin-right: 1rem;
   margin-left: 1rem;
 }
+.notification_icon_button {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+.notification_icon_button:hover,
+.notification_icon_button:active,
+.notification_icon_button:focus,
+.notification_icon_button:visited {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.notification_panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5fafd;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  width: 40vw;
+  max-width: 40vw;
+  height: 60vh;
+  margin-top: 8px;
+  left: -111px;
+}
+.notification_panel_header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  background-color: #28354b;
+  color: #ffffff;
+  border: 2px solid #707070;
+  padding: 0rem 1rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+.notification_panel_body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0rem 1rem;
+}
+.notification_panel_card {
+  border-radius: 1rem;
+  height: 14vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  box-shadow: 1px 1px 2px 2px rgba(241, 238, 238, 0.801);
+}
 #card_page {
   margin-top: 1rem;
   background-color: #f5fafd;
@@ -749,8 +807,6 @@ main {
   border-top-right-radius: 20px;
 }
 #table_header_content {
-  /* border-radius: 1rem; */
-  /* background-color: #eaf4ff; */
   display: flex;
   padding: 2.5rem 0rem 2.5rem 0rem;
 }
@@ -808,4 +864,13 @@ main {
 }
 #Student_table::-webkit-scrollbar {
   display: none;
+}
+.redBorder {
+  border: 1px solid #dc3545;
+}
+.errorText {
+  width: 100% !important;
+  margin-top: 0.25rem !important;
+  font-size: 0.875em !important;
+  color: #dc3545 !important;
 }

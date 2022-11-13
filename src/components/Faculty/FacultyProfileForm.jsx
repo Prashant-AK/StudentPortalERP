@@ -43,49 +43,117 @@ const initialState = {
 function FacultyProfileForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState(initialState);
+  const [errors, setErrors] = useState({});
+  const [formValues, setFormValues] = useState(initialState);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormValues({ ...formValues, [name]: value });
+    if (!!errors[name]) setErrors({ ...errors, [name]: null });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      // console.log('errrorrr');
-      alert('Please fill all the fields');
-    } else {
-      setValidated(true);
-      await dispatch(adminThunk.createFaculty(formData));
-      console.log('submit form ', formData);
-      navigate('/teacher-profile');
-    }
-  };
   function onSelect(selectedList, selectedItem) {
     let arr = selectedList.map((data) => data.name);
     if (selectedItem?.check === 'subject') {
-      setFormData({ ...formData, subjects: arr });
+      setFormValues({ ...formValues, subjects: arr });
+      if (!!errors['subjects']) setErrors({ ...errors, subjects: null });
     } else if (selectedItem?.check === 'course') {
-      setFormData({ ...formData, course: arr });
+      setFormValues({ ...formValues, course: arr });
+      if (!!errors['course']) setErrors({ ...errors, course: null });
     } else {
-      setFormData({ ...formData, semester: arr });
+      setFormValues({ ...formValues, semester: arr });
+      if (!!errors['semester']) setErrors({ ...errors, semester: null });
     }
   }
 
   function onRemove(selectedList, removedItem) {
     let arr = selectedList.map((data) => data.name);
     if (removedItem?.check === 'subject') {
-      setFormData({ ...formData, subjects: arr });
+      setFormValues({ ...formValues, subjects: arr });
     } else if (removedItem?.check === 'course') {
-      setFormData({ ...formData, course: arr });
+      setFormValues({ ...formValues, course: arr });
     } else {
-      setFormData({ ...formData, semester: arr });
+      setFormValues({ ...formValues, semester: arr });
     }
   }
 
+  const validateForm = () => {
+    const {
+      teacher_id,
+      faculty_name,
+      contact_number,
+      email_address,
+      password,
+      father_name,
+      home_address,
+      city,
+      designation,
+      qualifications,
+      subjects,
+      course,
+      semester,
+    } = formValues;
+    const newError = {};
+    if (!faculty_name || faculty_name === '')
+      newError.faculty_name = 'Please enter name.';
+    if (!father_name || father_name === '')
+      newError.father_name = 'Please enter name.';
+    if (!course || course?.length <= 0)
+      newError.course = 'Please select course';
+    if (!subjects || subjects?.length <= 0)
+      newError.subjects = 'Please select subjects';
+    if (!semester || semester?.length <= 0)
+      newError.semester = 'Please select semester';
+    if (!password || password === '')
+      newError.password = 'Please enter password.';
+    if (!city || city === '') newError.city = 'Please select city.';
+    if (!contact_number || contact_number === '')
+      newError.contact_number = 'Please enter contact number';
+    if (!home_address || home_address === '')
+      newError.home_address = 'Please enter home address';
+    if (!email_address || email_address === '')
+      newError.email_address = 'Please enter email.';
+    if (!designation || designation === '')
+      newError.designation = 'Please enter designation.';
+    if (!qualifications || qualifications === '')
+      newError.qualifications = 'Please enter qualifications.';
+
+    return newError;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formErrors = validateForm();
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+    } else {
+    }
+
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+
+    // }
+    // if (form.checkValidity() === false) {
+    // console.log('errrorrr');
+    // alert('Please fill all the fields');
+    // } else {
+    // setValidated(true);
+
+    // await dispatch(
+    //   adminThunk.createEvent({ ...formValues, file: uploadImage })
+    // );
+
+    // console.log(
+    //   'submit form ',
+    //   // file: uploadImage,
+    //   form_Data.get('')
+    // );
+    // navigate('/events');
+    // }
+  };
   const {
     teacher_id,
     faculty_name,
@@ -97,7 +165,7 @@ function FacultyProfileForm() {
     city,
     designation,
     qualifications,
-  } = formData;
+  } = formValues;
 
   return (
     <>
@@ -113,9 +181,9 @@ function FacultyProfileForm() {
 
       <div className={classes.container}>
         <div className={classes.subContainer}>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate onSubmit={handleSubmit}>
             <Col className="d-grid gap-3" style={{ paddingTop: '2rem' }}>
-              <Form.Group className="w-50" controlId="validationCustom01">
+              <Form.Group className="w-50" controlId="faculty_name">
                 <Form.Label>Faculty Name</Form.Label>
                 <Form.Control
                   name="faculty_name"
@@ -124,15 +192,17 @@ function FacultyProfileForm() {
                   required
                   type="text"
                   placeholder="Faculty Name"
-                  // defaultValue="Mark"
+                  isInvalid={!!errors?.faculty_name}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.faculty_name}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="w-50" controlId="validationCustom02">
                 <Form.Label>Faculty ID</Form.Label>
                 <Form.Control name="teacher_id" value={teacher_id} />
               </Form.Group>
-              <Form.Group className="w-50" controlId="validationCustom02">
+              <Form.Group className="w-50" controlId="contact_number">
                 <Form.Label>Contact Number</Form.Label>
                 <Form.Control
                   required
@@ -141,10 +211,13 @@ function FacultyProfileForm() {
                   name="contact_number"
                   value={contact_number}
                   onChange={handleChange}
+                  isInvalid={!!errors?.contact_number}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.contact_number}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50" controlId="validationCustom02">
+              <Form.Group className="w-50" controlId="email_address">
                 <Form.Label>Email Address</Form.Label>
                 <Form.Control
                   required
@@ -153,10 +226,13 @@ function FacultyProfileForm() {
                   onChange={handleChange}
                   type="email"
                   placeholder="Enter Email"
+                  isInvalid={!!errors?.email_address}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.email_address}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50" controlId="validationCustom02">
+              <Form.Group className="w-50" controlId="password">
                 <Form.Label>Set Password</Form.Label>
                 <Form.Control
                   required
@@ -165,10 +241,13 @@ function FacultyProfileForm() {
                   onChange={handleChange}
                   type="password"
                   placeholder="********"
+                  isInvalid={!!errors?.password}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.password}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50" controlId="validationCustom01">
+              <Form.Group className="w-50" controlId="designation">
                 <Form.Label>Designation</Form.Label>
                 <Form.Control
                   required
@@ -178,10 +257,14 @@ function FacultyProfileForm() {
                   type="text"
                   placeholder="Enter Name"
                   // defaultValue="Mark"
+
+                  isInvalid={!!errors?.designation}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.designation}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50" controlId="validationCustom01">
+              <Form.Group className="w-50" controlId="father_name">
                 <Form.Label>Spouse/Father's Name</Form.Label>
                 <Form.Control
                   required
@@ -190,11 +273,13 @@ function FacultyProfileForm() {
                   onChange={handleChange}
                   type="text"
                   placeholder="Enter Name"
-                  // defaultValue="Mark"
+                  isInvalid={!!errors?.father_name}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.father_name}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50" controlId="validationCustom01">
+              <Form.Group className="w-50" controlId="home_address">
                 <Form.Label>Home Address</Form.Label>
                 <Form.Control
                   required
@@ -203,26 +288,36 @@ function FacultyProfileForm() {
                   onChange={handleChange}
                   type="text"
                   placeholder="Enter Address"
-                  // defaultValue="Mark"
+                  isInvalid={!!errors?.home_address}
                 />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.home_address}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="w-50">
-                <select
+              <Form.Group className="w-50" controlId="city">
+                <Form.Control
+                  className="form-select form-select-md mb-0"
+                  aria-label=".form-select-lg example"
                   name="city"
                   onChange={handleChange}
                   value={city}
-                  className="form-select form-select-md mb-0"
-                  aria-label=".form-select-lg example"
+                  isInvalid={!!errors?.city}
+                  required
+                  as="select"
+                  type="select"
                 >
-                  <option selected>Select City</option>
+                  <option defaultValue="">Assign City</option>
                   <option value="Bareilly">Bareilly</option>
-                  <option value="Noida">Noida</option>
+                  <option value="Kanupur">Kanpur</option>
                   <option value="Delhi">Delhi</option>
-                </select>
+                  <option value="Noida">Noida</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors?.city}
+                </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group className="w-50" controlId="validationCustom01">
+              <Form.Group className="w-50" controlId="qualifications">
                 <Form.Label>Qualification</Form.Label>
                 <Form.Control
                   name="qualifications"
@@ -230,8 +325,11 @@ function FacultyProfileForm() {
                   onChange={handleChange}
                   type="text"
                   placeholder="Enter Qualification"
-                  // defaultValue="Mark"
+                  isInvalid={!!errors?.qualifications}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors?.qualifications}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
@@ -240,41 +338,58 @@ function FacultyProfileForm() {
               <Form.Group className="w-50">
                 <Form.Label>Select Subject</Form.Label>
                 <Multiselect
+                  className={`${!!errors.subjects && 'redBorder'}`}
                   closeOnSelect={true}
-                  name="subject"
+                  name="subjects"
                   style={multiselectStyle}
-                  options={SUBJECT} // Options to display in the dropdown
-                  // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-                  onSelect={onSelect} // Function will trigger on select event
-                  onRemove={onRemove} // Function will trigger on remove event
-                  displayValue="name" // Property name to display in the dropdown options
-
-                  // placeholder="Select Subject"
+                  options={SUBJECT}
+                  onSelect={onSelect}
+                  onRemove={onRemove}
+                  displayValue="name"
                 />
+                <Form.Control.Feedback
+                  className={`${!!errors?.subjects && 'errorText'}`}
+                  type={!!errors?.subjects}
+                >
+                  {errors?.subjects}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="w-50">
                 <Form.Label>Select Course</Form.Label>
                 <Multiselect
+                  className={`${!!errors.course && 'redBorder'}`}
                   style={multiselectStyle}
-                  options={COURSE} // Options to display in the dropdown
-                  // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-                  onSelect={onSelect} // Function will trigger on select event
-                  onRemove={onRemove} // Function will trigger on remove event
-                  displayValue="name" // Property name to display in the dropdown options
-                  // placeholder="Select Course"
+                  options={COURSE}
+                  onSelect={onSelect}
+                  onRemove={onRemove}
+                  displayValue="name"
+                  name="course"
                 />
+                <Form.Control.Feedback
+                  className={`${!!errors?.course && 'errorText'}`}
+                  type={!!errors?.course}
+                >
+                  {errors?.course}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="w-50">
                 <Form.Label>Select Semester</Form.Label>
                 <Multiselect
+                  className={`${!!errors.semester && 'redBorder'}`}
                   style={multiselectStyle}
                   options={SEMESTER} // Options to display in the dropdown
                   // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
                   onSelect={onSelect} // Function will trigger on select event
                   onRemove={onRemove} // Function will trigger on remove event
                   displayValue="name" // Property name to display in the dropdown options
-                  // placeholder="Select Semester"
+                  name="semester"
                 />
+                <Form.Control.Feedback
+                  className={`${!!errors?.semester && 'errorText'}`}
+                  type={!!errors?.semester}
+                >
+                  {errors?.semester}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
@@ -299,14 +414,13 @@ export default FacultyProfileForm;
 
 const multiselectStyle = {
   multiselectContainer: {
+    borderRadius: '6px',
     // To change css for multiselect (Width,height,etc..)
   },
   searchBox: {
     // To change search box element look
     border: 'none',
     background: 'white',
-    // fontSize: "10px",
-    // minHeight: "50px"
   },
   inputField: {
     // To change input field position or margin
@@ -314,16 +428,18 @@ const multiselectStyle = {
   },
   chips: {
     // To change css chips(Selected options)
-    color: 'white',
-    backgroundColor: '#fd8473',
+    color: 'black',
+    backgroundColor: '#eaf4ff',
   },
   optionContainer: {
     // To change css for option container
     border: 'none',
-    backgroundColor: '#fd8473',
+    backgroundColor: '#eaf4ff',
   },
   option: {
     // To change css for dropdown options
+    // backgroundColor: '#eaf4ff',
+    color: 'black',
   },
   groupHeading: {
     // To chanage group heading style

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import ForgotPasswordImg from '../../assests/ForgotPasswordImg.png';
@@ -9,25 +9,29 @@ import classes from './Login.module.css';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
   const goToOTP = () => {
     navigate('/OTP');
   };
   return (
     <>
-      <Container className={classes.mainContainer}>
-        <Row className=" justify-content-center">
+      <div className={classes.mainContainer}>
+        <Row>
           <Col
             style={{
               display: 'flex',
               justifyContent: 'center',
             }}
           >
-            <img src={ForgotPasswordImg} id="Forgotimg"></img>
+            <div className={classes.loginImg}>
+              {/* <img src={ForgotPasswordImg} id="Forgotimg"/> */}
+              <img src={ForgotPasswordImg} width="100%" alt="Login" />
+            </div>
           </Col>
 
           <Col
-            id="forgot_formcontainer"
-            style={{ border: 'solid', borderColor: '#eeeeee' }}
+            className={classes.loginFormContainer}
+            style={{ border: 'solid', borderColor: '#B0CAE5' }}
           >
             <ReactRoundedImage
               className="formImg"
@@ -38,7 +42,7 @@ const ForgotPassword = () => {
               roundedSize="0"
               borderRadius="70"
             />
-            <div id="forgotform_heading">
+            <div id="form_heading">
               <h3>Forgot Password ?</h3>
               <h6 style={{ color: 'gray' }}>
                 Enter your email address to reset your password{' '}
@@ -60,10 +64,13 @@ const ForgotPassword = () => {
 
               <div className="form-floating mb-3">
                 <input
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   className="form-control"
                   id="ForgotInputfields"
                   placeholder="name@example.com"
+                  value={email}
                 />
                 <label for="floatingInput">Email address</label>
               </div>
@@ -79,7 +86,7 @@ const ForgotPassword = () => {
             </form>
           </Col>
         </Row>
-      </Container>
+      </div>
     </>
   );
 };

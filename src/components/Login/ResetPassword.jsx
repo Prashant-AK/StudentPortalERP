@@ -1,38 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../App.css';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
+import { Row, Col, Button, Form } from 'react-bootstrap';
 import ResetPasswordImg from '../../assests/ResetPasswordImg.png';
 import ReactRoundedImage from 'react-rounded-image';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import classes from './Login.module.css';
+
 const DashBoard = () => {
   const navigate = useNavigate();
+  const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
+
   const goToLogin = () => {
     navigate('/');
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (password === password2) {
+      console.log(password);
+    }
+  };
   return (
     <>
-      <div className="container" id="reset_container">
-        <div className="row justify-content-center">
-          <div className="col" id="resetimg">
-            <img src={ResetPasswordImg} id="resetimg"></img>
-          </div>
-
-          <div
-            className="col"
-            id="reset_formcontainer"
-            style={{ border: 'solid', borderColor: '#eeeeee' }}
+      <div className={classes.mainContainer}>
+        <Row>
+          <Col
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <div className={classes.loginImg}>
+              <img src={ResetPasswordImg} width="100%" alt="Login" />
+            </div>
+          </Col>
+          <Col
+            className={classes.loginFormContainer}
+            style={{ border: 'solid', borderColor: '#B0CAE5' }}
           >
             <ReactRoundedImage
               className="formImg"
               image={ResetPasswordImg}
               roundedColor="#321124"
-              imageWidth="120"
-              imageHeight="120"
-              roundedSize="1"
+              imageWidth="100"
+              imageHeight="100"
+              roundedSize="0"
               borderRadius="70"
             />
             <div id="form_heading">
@@ -48,6 +62,7 @@ const DashBoard = () => {
                 className="form-control"
                 id="ResetInputfields"
                 placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <label for="floatingPassword">Password</label>
             </div>
@@ -58,20 +73,21 @@ const DashBoard = () => {
                 className="form-control"
                 id="ResetInputfields"
                 placeholder="Password"
+                onChange={(e) => setPassword2(e.target.value)}
               />
               <label for="floatingPassword">Confirm Password</label>
             </div>
 
             <button
-              type="button"
+              type="submit"
               className="btn-lg"
               onClick={goToLogin}
               id="ConfirmPassword_btn"
             >
               Confirm Password
             </button>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     </>
   );
