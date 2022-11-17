@@ -37,7 +37,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/Login" element={<Login />} />
+          {/* <Route path="/Login" element={<Login />} /> */}
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/OTP" element={<OTP />} />
           <Route path="/ResetPassword" element={<ResetPassword />} />
@@ -47,7 +47,7 @@ function App() {
             {/* <SideBar />
             <Header /> */}
             <Route
-              path="/dashboard"
+              path="dashboard"
               element={
                 <>
                   <div
@@ -237,8 +237,9 @@ function App() {
         </Routes>
         <Routes element={<PrivateRoutes />}>
           <Route path="teacher">
+            <Route index element={<Login />} />
             <Route
-              index
+              path="dashboard"
               element={
                 <>
                   <div

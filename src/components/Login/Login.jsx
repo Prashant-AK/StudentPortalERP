@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ReactRoundedImage from 'react-rounded-image';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import { loginThunk } from '../../redux/pages';
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
@@ -25,12 +26,18 @@ const Login = () => {
     console.log('role is ', role === 'faculty');
     await dispatch(loginThunk.login({ email, password }));
 
-    if (role === 'faculty') {
-      navigate('/teacher');
+    // if (role === 'faculty') {
+    //   navigate('/teacher');
+    // } else {
+    //   navigate('/DashBoard');
+    // }
+    if (location.pathname === '/teacher/' || location.pathname === '/teacher') {
+      navigate('/teacher/dashboard');
     } else {
-      navigate('/DashBoard');
+      navigate('/dashboard');
     }
   };
+  console.log('url', location.pathname);
   return (
     <>
       <div className={classes.mainContainer}>
@@ -70,7 +77,7 @@ const Login = () => {
               </h6>
             </div>
 
-            <Form.Group style={{ marginTop: '1rem' }}>
+            {/* <Form.Group style={{ marginTop: '1rem' }}>
               <select
                 name="role"
                 onChange={(e) => setRole(e.target.value)}
@@ -82,7 +89,7 @@ const Login = () => {
                 <option value="admin">Super Admin</option>
                 <option value="faculty">Teacher</option>
               </select>
-            </Form.Group>
+            </Form.Group> */}
             <div className="form-floating mb-3" style={{ marginTop: '1rem' }}>
               <input
                 type="email"
