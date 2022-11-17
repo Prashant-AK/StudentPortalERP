@@ -14,6 +14,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import QRCode from 'react-qr-code';
+
 import { Bar } from 'react-chartjs-2';
 
 import QRicon from '../../assests/QRicon.png';
@@ -62,10 +64,41 @@ const options = {
     },
   },
 };
-
+const initialState = {
+  semester: '',
+  course: '',
+  classs: '',
+  lecture: '',
+  facultyName: '',
+  timeSlotStart: '',
+  timeSlotEnd: '',
+};
 const Cards = () => {
   const [value, onChange] = useState(new Date());
+  const [formValue, setFormValue] = useState(initialState);
+  const [QRShow, setQrShow] = useState(false);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValue({ ...formValue, [name]: value });
+  };
+  const handleQR = () => {
+    setQrShow(true);
+    setTimeout(() => {
+      setFormValue(initialState);
+      setQrShow(false);
+    }, 30000);
+    // console.log('handle Qr', formValue);
+  };
+  const {
+    semester,
+    course,
+    classs,
+    lecture,
+    facultyName,
+    timeSlotStart,
+    timeSlotEnd,
+  } = formValue;
   return (
     <>
       <Container>
@@ -309,6 +342,9 @@ const Cards = () => {
                 placeholder="Semester 1"
                 aria-label="First name"
                 className={`${classes.QR_form_inputs} form-control`}
+                name="semester"
+                value={semester}
+                onChange={handleChange}
               />
               <label for="Course" id="lables">
                 Enter Course
@@ -316,8 +352,11 @@ const Cards = () => {
               <input
                 type="text"
                 placeholder="B.Tech"
-                aria-label="First name"
+                aria-label="B.Tech"
                 className={`${classes.QR_form_inputs} form-control`}
+                name="course"
+                value={course}
+                onChange={handleChange}
               />
               <label for="Class" id="lables">
                 Enter Class
@@ -325,8 +364,11 @@ const Cards = () => {
               <input
                 type="text"
                 placeholder="CSE-II"
-                aria-label="First name"
+                aria-label="class"
                 className={`${classes.QR_form_inputs} form-control`}
+                name="classs"
+                value={classs}
+                onChange={handleChange}
               />
             </Col>
 
@@ -337,8 +379,11 @@ const Cards = () => {
               <input
                 type="text"
                 placeholder="Physics-1"
-                aria-label="Last name"
+                aria-label="Lecture"
                 className={`${classes.QR_form_inputs} form-control`}
+                name="lecture"
+                value={lecture}
+                onChange={handleChange}
               />
               <label for="Faculty" id="lables">
                 Enter Faculty Name
@@ -346,22 +391,75 @@ const Cards = () => {
               <input
                 type="text"
                 placeholder="Sangeet Das"
-                aria-label="Last name"
+                aria-label="Faculty Name"
                 className={`${classes.QR_form_inputs} form-control`}
+                name="facultyName"
+                value={facultyName}
+                onChange={handleChange}
               />
-              <label for="Time" id="lables">
-                Enter Time Slot
-              </label>
-              <input
-                type="text"
-                placeholder="9:00AM-11:00Am"
-                aria-label="Last name"
-                className={`${classes.QR_form_inputs} form-control`}
-              />
-            </Col>
 
+              <Row>
+                <Col>
+                  <label for="Time" id="lables">
+                    Select Start Time
+                  </label>
+                  <input
+                    type="time"
+                    // placeholder="9:00AM-11:00Am"
+                    aria-label="timeSlotStart"
+                    className={`${classes.QR_form_inputs} form-control`}
+                    name="timeSlotStart"
+                    value={timeSlotStart}
+                    onChange={handleChange}
+                  />
+                </Col>
+                <Col>
+                  <label for="Time" id="lables">
+                    Select End Time
+                  </label>
+                  <input
+                    type="time"
+                    // placeholder="9:00AM-11:00Am"
+                    aria-label="timeSlotEnd"
+                    className={`${classes.QR_form_inputs} form-control`}
+                    name="timeSlotEnd"
+                    value={timeSlotEnd}
+                    onChange={handleChange}
+                  />
+                </Col>
+              </Row>
+            </Col>
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {QRShow && (
+                <div
+                  style={{
+                    width: '30vw',
+                    height: '20vh',
+                    // border: '1px solid blue',
+                  }}
+                >
+                  <QRCode
+                    size={100}
+                    style={{
+                      height: '40vh',
+                      width: '100%',
+                    }}
+                    value={JSON.stringify(formValue)}
+                    viewBox={`-60 -50 256 256`}
+                  />
+                </div>
+              )}
+            </Row>
             <Row style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <button className={classes.QRbtn}>Generate QR</button>
+              <button onClick={handleQR} className={classes.QRbtn}>
+                Generate QR
+              </button>
             </Row>
           </Row>
         </Stack>
