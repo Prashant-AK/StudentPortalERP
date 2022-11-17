@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Stack } from 'react-bootstrap';
+import { Container, Row, Col, Stack, Form } from 'react-bootstrap';
 import {
   CircularProgressbarWithChildren,
   buildStyles,
@@ -77,17 +77,52 @@ const Cards = () => {
   const [value, onChange] = useState(new Date());
   const [formValue, setFormValue] = useState(initialState);
   const [QRShow, setQrShow] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValue({ ...formValue, [name]: value });
+    if (!!errors[name]) setErrors({ ...errors, [name]: null });
   };
+  const validateForm = () => {
+    const {
+      semester,
+      course,
+      classs,
+      lecture,
+      facultyName,
+      timeSlotStart,
+      timeSlotEnd,
+    } = formValue;
+    const newError = {};
+    if (!semester || semester === '')
+      newError.semester = 'Please enter semester.';
+    if (!course || course === '') newError.course = 'Please enter course.';
+    if (!classs || classs === '') newError.classs = 'Please enter class.';
+    if (!lecture || lecture === '') newError.lecture = 'Please enter lecture.';
+    if (!timeSlotStart || timeSlotStart === '')
+      newError.timeSlotStart = 'Please enter time.';
+    if (!timeSlotEnd || timeSlotEnd === '')
+      newError.timeSlotEnd = 'Please enter time.';
+    if (!facultyName || facultyName === '')
+      newError.facultyName = 'Please enter faculty name.';
+
+    return newError;
+  };
+
   const handleQR = () => {
-    setQrShow(true);
-    setTimeout(() => {
-      setFormValue(initialState);
-      setQrShow(false);
-    }, 30000);
+    const formErrors = validateForm();
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+    } else {
+      setQrShow(true);
+      setTimeout(() => {
+        setFormValue(initialState);
+        setQrShow(false);
+      }, 30000);
+    }
+
     // console.log('handle Qr', formValue);
   };
   const {
@@ -334,98 +369,168 @@ const Cards = () => {
             </div>
 
             <Col id="form">
-              <label for="Semester" id="lables">
-                Enter Semester
-              </label>
-              <input
-                type="text"
-                placeholder="Semester 1"
-                aria-label="First name"
-                className={`${classes.QR_form_inputs} form-control`}
-                name="semester"
-                value={semester}
-                onChange={handleChange}
-              />
-              <label for="Course" id="lables">
-                Enter Course
-              </label>
-              <input
-                type="text"
-                placeholder="B.Tech"
-                aria-label="B.Tech"
-                className={`${classes.QR_form_inputs} form-control`}
-                name="course"
-                value={course}
-                onChange={handleChange}
-              />
-              <label for="Class" id="lables">
-                Enter Class
-              </label>
-              <input
-                type="text"
-                placeholder="CSE-II"
-                aria-label="class"
-                className={`${classes.QR_form_inputs} form-control`}
-                name="classs"
-                value={classs}
-                onChange={handleChange}
-              />
+              <Form.Group>
+                <label for="Semester" id="lables">
+                  Enter Semester
+                </label>
+                <input
+                  type="text"
+                  placeholder="Semester 1"
+                  aria-label="First name"
+                  className={`${classes.QR_form_inputs} ${
+                    !!errors.semester && 'redBorder'
+                  } form-control`}
+                  name="semester"
+                  value={semester}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback
+                  className={`${!!errors?.semester && 'errorText'}`}
+                  type={!!errors?.semester}
+                >
+                  {errors?.semester}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <label for="Course" id="lables">
+                  Enter Course
+                </label>
+                <input
+                  type="text"
+                  placeholder="B.Tech"
+                  aria-label="B.Tech"
+                  className={`${classes.QR_form_inputs} ${
+                    !!errors.course && 'redBorder'
+                  } form-control`}
+                  name="course"
+                  value={course}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback
+                  className={`${!!errors?.course && 'errorText'}`}
+                  type={!!errors?.course}
+                >
+                  {errors?.course}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <label for="Class" id="lables">
+                  Enter Class
+                </label>
+                <input
+                  type="text"
+                  placeholder="CSE-II"
+                  aria-label="class"
+                  className={`${classes.QR_form_inputs} ${
+                    !!errors.classs && 'redBorder'
+                  } form-control`}
+                  name="classs"
+                  value={classs}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback
+                  className={`${!!errors?.classs && 'errorText'}`}
+                  type={!!errors?.classs}
+                >
+                  {errors?.classs}
+                </Form.Control.Feedback>
+              </Form.Group>
             </Col>
 
             <Col id="form">
-              <label for="Lecture" id="lables">
-                Enter Lecture
-              </label>
-              <input
-                type="text"
-                placeholder="Physics-1"
-                aria-label="Lecture"
-                className={`${classes.QR_form_inputs} form-control`}
-                name="lecture"
-                value={lecture}
-                onChange={handleChange}
-              />
-              <label for="Faculty" id="lables">
-                Enter Faculty Name
-              </label>
-              <input
-                type="text"
-                placeholder="Sangeet Das"
-                aria-label="Faculty Name"
-                className={`${classes.QR_form_inputs} form-control`}
-                name="facultyName"
-                value={facultyName}
-                onChange={handleChange}
-              />
+              <Form.Group>
+                <label for="Lecture" id="lables">
+                  Enter Lecture
+                </label>
+                <input
+                  type="text"
+                  placeholder="Physics-1"
+                  aria-label="Lecture"
+                  className={`${classes.QR_form_inputs} ${
+                    !!errors.lecture && 'redBorder'
+                  } form-control`}
+                  name="lecture"
+                  value={lecture}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback
+                  className={`${!!errors?.lecture && 'errorText'}`}
+                  type={!!errors?.lecture}
+                >
+                  {errors?.lecture}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <label for="Faculty" id="lables">
+                  Enter Faculty Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Sangeet Das"
+                  aria-label="Faculty Name"
+                  className={`${classes.QR_form_inputs} ${
+                    !!errors.facultyName && 'redBorder'
+                  } form-control`}
+                  name="facultyName"
+                  value={facultyName}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback
+                  className={`${!!errors?.facultyName && 'errorText'}`}
+                  type={!!errors?.facultyName}
+                >
+                  {errors?.facultyName}
+                </Form.Control.Feedback>
+              </Form.Group>
 
               <Row>
                 <Col>
-                  <label for="Time" id="lables">
-                    Select Start Time
-                  </label>
-                  <input
-                    type="time"
-                    // placeholder="9:00AM-11:00Am"
-                    aria-label="timeSlotStart"
-                    className={`${classes.QR_form_inputs} form-control`}
-                    name="timeSlotStart"
-                    value={timeSlotStart}
-                    onChange={handleChange}
-                  />
+                  <Form.Group>
+                    <label for="Time" id="lables">
+                      Select Start Time
+                    </label>
+                    <input
+                      type="time"
+                      // placeholder="9:00AM-11:00Am"
+                      aria-label="timeSlotStart"
+                      className={`${classes.QR_form_inputs} ${
+                        !!errors.timeSlotStart && 'redBorder'
+                      } form-control`}
+                      name="timeSlotStart"
+                      value={timeSlotStart}
+                      onChange={handleChange}
+                    />
+                    <Form.Control.Feedback
+                      className={`${!!errors?.timeSlotStart && 'errorText'}`}
+                      type={!!errors?.timeSlotStart}
+                    >
+                      {errors?.timeSlotStart}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                 </Col>
                 <Col>
-                  <label for="Time" id="lables">
-                    Select End Time
-                  </label>
-                  <input
-                    type="time"
-                    // placeholder="9:00AM-11:00Am"
-                    aria-label="timeSlotEnd"
-                    className={`${classes.QR_form_inputs} form-control`}
-                    name="timeSlotEnd"
-                    value={timeSlotEnd}
-                    onChange={handleChange}
-                  />
+                  <Form.Group>
+                    <label for="Time" id="lables">
+                      Select End Time
+                    </label>
+                    <input
+                      type="time"
+                      // placeholder="9:00AM-11:00Am"
+                      aria-label="timeSlotEnd"
+                      className={`${classes.QR_form_inputs} ${
+                        !!errors.timeSlotEnd && 'redBorder'
+                      } form-control`}
+                      name="timeSlotEnd"
+                      value={timeSlotEnd}
+                      onChange={handleChange}
+                    />
+                    <Form.Control.Feedback
+                      className={`${!!errors?.timeSlotEnd && 'errorText'}`}
+                      type={!!errors?.timeSlotEnd}
+                    >
+                      {errors?.timeSlotEnd}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                 </Col>
               </Row>
             </Col>
