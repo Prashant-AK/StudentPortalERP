@@ -340,7 +340,9 @@ function TeacherCard() {
               )}
             </Row>
             <Row style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <button className={classes.QRbtn}>Generate QR</button>
+              <button onClick={handleQR} className={classes.QRbtn}>
+                Generate QR
+              </button>
             </Row>
           </Row>
           <Stack
