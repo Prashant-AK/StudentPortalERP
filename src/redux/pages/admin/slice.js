@@ -3,7 +3,7 @@ import { adminThunk } from './thunk';
 
 export const initialState = {
   loading: false,
-  error: '',
+  error: {},
   data: {},
   facultyList: [],
   studentList: [],
@@ -109,6 +109,7 @@ export const adminSlice = createSlice({
       .addCase(adminThunk.createStudent.pending, (state) => ({
         ...state,
         loading: true,
+        data: {},
       }))
       .addCase(adminThunk.createStudent.fulfilled, (state, { payload }) => ({
         ...state,
@@ -118,21 +119,25 @@ export const adminSlice = createSlice({
       .addCase(adminThunk.createStudent.rejected, (state, { payload }) => ({
         ...state,
         loading: false,
+        data: {},
         error: payload,
       }))
       .addCase(adminThunk.getStudentList.pending, (state) => ({
         ...state,
         loading: true,
+        data: {},
       }))
       .addCase(adminThunk.getStudentList.fulfilled, (state, { payload }) => ({
         ...state,
         loading: false,
+        data: {},
         studentList: payload,
       }))
       .addCase(adminThunk.getStudentList.rejected, (state, { payload }) => ({
         ...state,
         loading: false,
         error: payload,
+        data: {},
       }))
       .addCase(adminThunk.getStudentDetails.pending, (state) => ({
         ...state,
@@ -154,6 +159,7 @@ export const adminSlice = createSlice({
       .addCase(adminThunk.updateStudentDetail.pending, (state) => ({
         ...state,
         loading: true,
+        data: {},
       }))
       .addCase(
         adminThunk.updateStudentDetail.fulfilled,
@@ -169,6 +175,7 @@ export const adminSlice = createSlice({
           ...state,
           loading: false,
           error: payload,
+          data: {},
         })
       )
       .addCase(adminThunk.deleteStudent.pending, (state) => ({

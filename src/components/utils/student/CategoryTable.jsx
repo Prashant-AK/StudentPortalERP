@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown, DropdownButton, ListGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { BsThreeDots } from 'react-icons/bs';
 import { data } from './CategoryTableData';
 
 export const CategoryTable = ({ profile, handleShow }) => {
@@ -105,9 +106,12 @@ export const CategoryTable = ({ profile, handleShow }) => {
                         // id={`dropdown-button-drop-down`}
                         drop="down"
                         variant="secondary"
-                        title="..."
+                        title={<BsThreeDots />}
                       >
-                        <Dropdown.Item eventKey="1" onClick={handleShow}>
+                        <Dropdown.Item
+                          eventKey="1"
+                          onClick={() => handleShow(data)}
+                        >
                           View Detail
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="2">Change</Dropdown.Item>
@@ -119,9 +123,13 @@ export const CategoryTable = ({ profile, handleShow }) => {
                         // id={`dropdown-button-drop-down`}
                         drop="down"
                         variant="secondary"
-                        title="..."
+                        title={<BsThreeDots />}
+                        style={{ outline: 'none' }}
                       >
-                        <Dropdown.Item eventKey="1" onClick={handleShow}>
+                        <Dropdown.Item
+                          eventKey="1"
+                          onClick={() => handleShow(data)}
+                        >
                           View Profile
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="2">Cancel</Dropdown.Item>

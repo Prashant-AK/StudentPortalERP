@@ -13,9 +13,16 @@ export const StudentProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [studentProfile, setStudentProfile] = useState({});
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setStudentProfile({});
+    setShow(false);
+  };
+  const handleShow = (profileData) => {
+    setStudentProfile(profileData);
+    setShow(true);
+  };
 
   const callDispatch = async () => {
     await dispatch(adminThunk.getStudentList());
@@ -118,31 +125,41 @@ export const StudentProfile = () => {
               <Row>
                 <p>
                   <span className={classes.topHead}>Student Name: </span>{' '}
-                  <strong className={classes.topContent}>Ankit Sharma</strong>
+                  <strong className={classes.topContent}>
+                    {studentProfile?.student_name}
+                  </strong>
                 </p>
               </Row>
               <Row>
                 <p>
                   <span className={classes.topHead}>Student Id: </span>
-                  <strong className={classes.topContent}>02255</strong>
+                  <strong className={classes.topContent}>
+                    {studentProfile?.student_id}
+                  </strong>
                 </p>
               </Row>
               <Row>
                 <p>
                   <span className={classes.topHead}>Course:</span>
-                  <strong className={classes.topContent}>B. Tech</strong>
+                  <strong className={classes.topContent}>
+                    {studentProfile?.student_course}
+                  </strong>
                 </p>
               </Row>
               <Row>
                 <p>
                   <span className={classes.topHead}>Semester:</span>
-                  <strong className={classes.topContent}>II</strong>
+                  <strong className={classes.topContent}>
+                    {studentProfile?.student_semester}
+                  </strong>
                 </p>
               </Row>
               <Row>
                 <p>
                   <span className={classes.topHead}>Class:</span>
-                  <strong className={classes.topContent}>CSE-1</strong>
+                  <strong className={classes.topContent}>
+                    {studentProfile?.student_class}
+                  </strong>
                 </p>
               </Row>
             </Col>
@@ -155,7 +172,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>Contact Number</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>+91 9876543210</p>
+                  <p className={classes.topContent}>
+                    +91 {studentProfile?.student_contact_number}
+                  </p>
                 </Col>
               </Row>
               <Row>
@@ -163,7 +182,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>Email Address</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>richa.saxena@gmail.com</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.student_email}
+                  </p>
                 </Col>
               </Row>
               <Row>
@@ -171,7 +192,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>Home Address</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>76, Green Park</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.student_home_address}
+                  </p>
                 </Col>
               </Row>
               <Row>
@@ -179,7 +202,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>City</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>Bareilly, U.P.</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.student_city}
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -190,7 +215,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>Father's Name</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>Mr. Sidharath Saxena</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.father_name}
+                  </p>
                 </Col>
               </Row>
               <Row>
@@ -198,7 +225,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>Email Address</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>richa.saxena@gmail.com</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.father_email}
+                  </p>
                 </Col>
               </Row>
               <Row>
@@ -206,7 +235,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>Contact Number</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>+91 9876543210</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.father_contact_number}
+                  </p>
                 </Col>
               </Row>
               <Row>
@@ -214,7 +245,9 @@ export const StudentProfile = () => {
                   <span className={classes.topHead}>City</span>
                 </Col>
                 <Col>
-                  <p className={classes.topContent}>Bareilly, U.P.</p>
+                  <p className={classes.topContent}>
+                    {studentProfile?.father_city}
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -222,7 +255,12 @@ export const StudentProfile = () => {
               <div>
                 <Button
                   className={classes.modalButton}
-                  onClick={() => navigate('/create-student-profile')}
+                  onClick={() => {
+                    // dispatch(adminThunk.getStudentDetails(studentProfile._id));
+                    navigate(`/create-student-profile/${studentProfile._id}`, {
+                      state: studentProfile,
+                    });
+                  }}
                 >
                   Edit
                 </Button>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -31,9 +31,36 @@ const initialState = {
 function StudentProfileForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  let { studentId } = useParams();
+  const { state } = useLocation();
   const [formValues, setformValues] = useState(initialState);
   const [errors, setErrors] = useState({});
+  const { loading, data, error } = useSelector((state) => state.adminState);
+
+  useEffect(() => {
+    if (!loading && data?.is_success) {
+      setformValues(initialState);
+      setErrors({});
+      navigate('/student-profile');
+    }
+    if (error) {
+      alert('Something went wrong');
+      navigate('/student-profile');
+    }
+    return () => {
+      // setLoaded(false)
+    };
+  }, [loading, data, error]);
+  console.log(loading, data, error);
+  useEffect(() => {
+    if (studentId) {
+      // dispatch(adminThunk.getStudentDetails(studentId))
+      setformValues(state);
+    }
+    return () => {
+      console.log('return');
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,38 +111,16 @@ function StudentProfileForm() {
 
     return newError;
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const formErrors = validateForm();
-
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
+      if (!studentId) await dispatch(adminThunk.createStudent(formValues));
+      else await dispatch(adminThunk.updateStudentDetail(formValues));
     }
-
-    // const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault();
-
-    // }
-    // if (form.checkValidity() === false) {
-    // console.log('errrorrr');
-    // alert('Please fill all the fields');
-    // } else {
-    // setValidated(true);
-
-    // await dispatch(
-    //   adminThunk.createEvent({ ...formValues, file: uploadImage })
-    // );
-
-    // console.log(
-    //   'submit form ',
-    //   // file: uploadImage,
-    //   form_Data.get('')
-    // );
-    // navigate('/events');
-    // }
   };
 
   const {

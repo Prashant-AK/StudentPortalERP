@@ -124,6 +124,16 @@ function App() {
               }
             />
             <Route
+              path="/create-student-profile/:studentId"
+              element={
+                <>
+                  <SideBar />
+                  <Header />
+                  <StudentProfileForm />
+                </>
+              }
+            />
+            <Route
               path="/create-faculty-profile"
               element={
                 <>

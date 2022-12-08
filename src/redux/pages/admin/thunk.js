@@ -99,7 +99,6 @@ export const adminThunk = {
       `${BASE_URL}/api/student/create-student`,
       formData
     );
-
     return data;
   }),
   getStudentList: createAsyncThunk('admin/StudentList', async () => {
@@ -121,23 +120,38 @@ export const adminThunk = {
     'admin/updateStudentDetail',
     async (formData) => {
       console.log('inside thunk values are====>', formData);
-      const { id } = formData;
+      const {
+        _id,
+        student_name,
+        student_id,
+        student_semester,
+        student_course,
+        student_class,
+        student_contact_number,
+        student_email,
+        student_home_address,
+        student_city,
+        father_name,
+        father_email,
+        father_contact_number,
+        father_city,
+      } = formData;
       const { data } = await axios.put(
-        `${BASE_URL}/api/student/update-student/${id}`,
+        `${BASE_URL}/api/student/update-student/${_id}`,
         {
-          student_id: 6,
-          student_name: 'AWSupdate',
-          student_course: 'B-tech',
-          student_semester: 'III',
-          student_class: 'Seventh',
-          student_contact_number: 6546846844684684,
-          student_email: 'awsupdate@gmail.com',
-          student_home_address: 'aws-update',
-          student_city: 'aws_city',
-          father_name: 'AWS_Father',
-          father_email: 'awsfather@gmail.com',
-          father_contact_number: 546541684168168,
-          father_city: 'aws_city',
+          student_name,
+          student_id,
+          student_semester,
+          student_course,
+          student_class,
+          student_contact_number,
+          student_email,
+          student_home_address,
+          student_city,
+          father_name,
+          father_email,
+          father_contact_number,
+          father_city,
         }
       );
       console.log(' faculty update api succesful data is ====>', data);
