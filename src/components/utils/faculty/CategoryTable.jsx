@@ -1,15 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Dropdown, DropdownButton } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-// import Dropdown from 'react-bootstrap/Dropdown';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
+import { useSelector, useDispatch } from 'react-redux';
+import { BsThreeDots } from 'react-icons/bs';
 import { head, content } from './CategoryTableData';
+import { facultyThunk } from '../../../redux/pages';
 
 export const CategoryTable = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { loading, facultyList } = useSelector((state) => state.adminState);
-
+  const handleRemove = async (id) => {
+    await dispatch(facultyThunk.deleteFaculty(id));
+  };
+  const keepDropDownOpen = () => {
+    window.$('#dropDownOpen').addClass('open');
+  };
   return (
     <div id="Student_table" style={{ backgroundColor: 'white' }}>
       <Table responsive>
@@ -71,15 +77,25 @@ export const CategoryTable = () => {
                     // id={`dropdown-button-drop-down`}
                     drop="down"
                     variant="secondary"
-                    title="..."
+                    title={<BsThreeDots />}
+                    onClick={keepDropDownOpen}
                   >
                     <Dropdown.Item
                       eventKey="1"
-                      onClick={() => navigate('/create-faculty-profile')}
+                      onClick={() =>
+                        navigate(`/create-faculty-profile/${data?._id}`, {
+                          state: data,
+                        })
+                      }
                     >
                       Edit
                     </Dropdown.Item>
-                    <Dropdown.Item eventKey="2">Remove</Dropdown.Item>
+                    <Dropdown.Item
+                      eventKey="2"
+                      onClick={() => handleRemove(data?._id)}
+                    >
+                      Remove
+                    </Dropdown.Item>
                   </DropdownButton>
                 </td>
               </tr>

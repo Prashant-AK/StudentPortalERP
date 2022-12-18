@@ -3,22 +3,22 @@ import { useDispatch } from 'react-redux';
 
 import '../../App.css';
 
-import { adminThunk } from '../../redux/pages';
+import { studentThunk } from '../../redux/pages';
 import { SeparateHeader } from '../topBar/HeaderBanner/SeparateHeader';
-import AttendanceTable from '../utils/faculty/AttendanceTable';
+import AttendanceTable from './AttendanceTable';
 
 function BasicExample() {
   const dispatch = useDispatch();
   const [value, onChange] = useState(new Date());
 
   const callDispatch = async () => {
-    await dispatch(adminThunk.getStudentList());
+    await dispatch(studentThunk.getAttendanceList());
   };
 
   useEffect(() => {
     callDispatch();
     return () => {
-      console.log('return statement ');
+      console.log('return statement  Daily Attendance ');
     };
   }, []);
 

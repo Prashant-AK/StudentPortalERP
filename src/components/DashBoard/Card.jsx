@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Stack, Form } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Stack,
+  Form,
+  Modal,
+  Button,
+} from 'react-bootstrap';
 import {
   CircularProgressbarWithChildren,
   buildStyles,
@@ -25,6 +33,7 @@ import { BsFillSquareFill } from 'react-icons/bs';
 
 import items from './Data';
 import classes from './Dashboard.module.css';
+import CustomModal from '../utils/customModal/CustomModal';
 
 ChartJS.register(
   CategoryScale,
@@ -109,7 +118,12 @@ const Cards = () => {
 
     return newError;
   };
-
+  const handleClose = () => {
+    setQrShow(false);
+  };
+  const handleShow = (profileData) => {
+    setQrShow(true);
+  };
   const handleQR = () => {
     const formErrors = validateForm();
 
@@ -117,10 +131,10 @@ const Cards = () => {
       setErrors(formErrors);
     } else {
       setQrShow(true);
-      setTimeout(() => {
-        setFormValue(initialState);
-        setQrShow(false);
-      }, 30000);
+      // setTimeout(() => {
+      //   setFormValue(initialState);
+      //   setQrShow(false);
+      // }, 30000);
     }
 
     // console.log('handle Qr', formValue);
@@ -370,115 +384,127 @@ const Cards = () => {
 
             <Col id="form">
               <Form.Group>
-                <label for="Semester" id="lables">
-                  Enter Semester
-                </label>
-                <input
-                  type="text"
-                  placeholder="Semester 1"
-                  aria-label="First name"
-                  className={`${classes.QR_form_inputs} ${
-                    !!errors.semester && 'redBorder'
-                  } form-control`}
+                <Form.Label>Semester</Form.Label>
+                <Form.Control
+                  className={`form-select form-select-md mb-0 ${classes.QR_form_inputs}`}
+                  aria-label=".form-select-lg example"
                   name="semester"
-                  value={semester}
                   onChange={handleChange}
-                />
-                <Form.Control.Feedback
-                  className={`${!!errors?.semester && 'errorText'}`}
-                  type={!!errors?.semester}
+                  value={semester}
+                  isInvalid={!!errors?.semester}
+                  required
+                  as="select"
+                  type="select"
+                  size="lg"
                 >
+                  <option defaultValue="">Select Semester</option>
+                  <option value="BTECH">B Tech</option>
+                  <option value="MBA">MBA</option>
+                  <option value="B COM">B COM</option>
+                  <option value="BCA">BCA</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
                   {errors?.semester}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
-                <label for="Course" id="lables">
-                  Enter Course
-                </label>
-                <input
-                  type="text"
-                  placeholder="B.Tech"
-                  aria-label="B.Tech"
-                  className={`${classes.QR_form_inputs} ${
-                    !!errors.course && 'redBorder'
-                  } form-control`}
+                <Form.Label>Course</Form.Label>
+                <Form.Control
+                  className={`form-select form-select-md mb-0 ${classes.QR_form_inputs}`}
+                  aria-label=".form-select-lg example"
                   name="course"
-                  value={course}
                   onChange={handleChange}
-                />
-                <Form.Control.Feedback
-                  className={`${!!errors?.course && 'errorText'}`}
-                  type={!!errors?.course}
+                  value={course}
+                  isInvalid={!!errors?.course}
+                  required
+                  as="select"
+                  type="select"
                 >
+                  <option defaultValue="">Select Course</option>
+                  <option value="BTECH">B Tech</option>
+                  <option value="MBA">MBA</option>
+                  <option value="B COM">B COM</option>
+                  <option value="BCA">BCA</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
                   {errors?.course}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
-                <label for="Class" id="lables">
-                  Enter Class
-                </label>
-                <input
-                  type="text"
-                  placeholder="CSE-II"
-                  aria-label="class"
-                  className={`${classes.QR_form_inputs} ${
-                    !!errors.classs && 'redBorder'
-                  } form-control`}
+                <Form.Label>Class</Form.Label>
+                <Form.Control
+                  className={`form-select form-select-md mb-0 ${classes.QR_form_inputs}`}
+                  aria-label=".form-select-lg example"
                   name="classs"
-                  value={classs}
                   onChange={handleChange}
-                />
-                <Form.Control.Feedback
-                  className={`${!!errors?.classs && 'errorText'}`}
-                  type={!!errors?.classs}
+                  value={classs}
+                  isInvalid={!!errors?.classs}
+                  required
+                  as="select"
+                  type="select"
                 >
+                  <option defaultValue="">Select Class</option>
+                  <option value="Class 1">Class 1</option>
+                  <option value="Class 2">Class 2</option>
+                  <option value="Class 3">Class 3</option>
+                  <option value="Class 4">Class 4</option>
+                  <option value="Class 5">Class 5</option>
+                  <option value="Class 6">Class 6</option>
+                  <option value="Class 7">Class 7</option>
+                  <option value="Class 8">Class 8</option>
+                  <option value="Class 9">Class 9</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
                   {errors?.classs}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
             <Col id="form">
+              <Form.Label>Lecture</Form.Label>
+              <Form.Control
+                className={`form-select form-select-md mb-0 ${classes.QR_form_inputs}`}
+                aria-label=".form-select-lg example"
+                name="lecture"
+                onChange={handleChange}
+                value={lecture}
+                isInvalid={!!errors?.lecture}
+                required
+                as="select"
+                type="select"
+              >
+                <option defaultValue="">Select Lecture</option>
+                <option value="Lecture 1">Lecture 1</option>
+                <option value="Lecture 2">Lecture 2</option>
+                <option value="Lecture 3">Lecture 3</option>
+                <option value="Lecture 4">Lecture 4</option>
+                <option value="Lecture 5">Lecture 5</option>
+                <option value="Lecture 6">Lecture 6</option>
+                <option value="Lecture 7">Lecture 7</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors?.lecture}
+              </Form.Control.Feedback>
               <Form.Group>
-                <label for="Lecture" id="lables">
-                  Enter Lecture
-                </label>
-                <input
-                  type="text"
-                  placeholder="Physics-1"
-                  aria-label="Lecture"
-                  className={`${classes.QR_form_inputs} ${
-                    !!errors.lecture && 'redBorder'
-                  } form-control`}
-                  name="lecture"
-                  value={lecture}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback
-                  className={`${!!errors?.lecture && 'errorText'}`}
-                  type={!!errors?.lecture}
-                >
-                  {errors?.lecture}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <label for="Faculty" id="lables">
-                  Enter Faculty Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Sangeet Das"
-                  aria-label="Faculty Name"
-                  className={`${classes.QR_form_inputs} ${
-                    !!errors.facultyName && 'redBorder'
-                  } form-control`}
+                <Form.Label>Faculty Name</Form.Label>
+                <Form.Control
+                  className={`form-select form-select-md mb-0 ${classes.QR_form_inputs}`}
+                  aria-label=".form-select-lg example"
                   name="facultyName"
-                  value={facultyName}
                   onChange={handleChange}
-                />
-                <Form.Control.Feedback
-                  className={`${!!errors?.facultyName && 'errorText'}`}
-                  type={!!errors?.facultyName}
+                  value={facultyName}
+                  isInvalid={!!errors?.facultyName}
+                  required
+                  as="select"
+                  type="select"
                 >
+                  <option defaultValue="">Select Faculty</option>
+                  <option value="Devansh">Devansh</option>
+                  <option value="Prashant">Prashant</option>
+                  <option value="Nate">Nate</option>
+                  <option value="Palak">Palak</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
                   {errors?.facultyName}
                 </Form.Control.Feedback>
               </Form.Group>
@@ -486,9 +512,7 @@ const Cards = () => {
               <Row>
                 <Col>
                   <Form.Group>
-                    <label for="Time" id="lables">
-                      Select Start Time
-                    </label>
+                    <Form.Label> Select Start Time</Form.Label>
                     <input
                       type="time"
                       // placeholder="9:00AM-11:00Am"
@@ -510,9 +534,7 @@ const Cards = () => {
                 </Col>
                 <Col>
                   <Form.Group>
-                    <label for="Time" id="lables">
-                      Select End Time
-                    </label>
+                    <Form.Label> Select End Time</Form.Label>
                     <input
                       type="time"
                       // placeholder="9:00AM-11:00Am"
@@ -534,33 +556,7 @@ const Cards = () => {
                 </Col>
               </Row>
             </Col>
-            <Row
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {QRShow && (
-                <div
-                  style={{
-                    width: '30vw',
-                    height: '20vh',
-                    // border: '1px solid blue',
-                  }}
-                >
-                  <QRCode
-                    size={100}
-                    style={{
-                      height: '40vh',
-                      width: '100%',
-                    }}
-                    value={JSON.stringify(formValue)}
-                    viewBox={`-60 -50 256 256`}
-                  />
-                </div>
-              )}
-            </Row>
+
             <Row style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <button onClick={handleQR} className={classes.QRbtn}>
                 Generate QR
@@ -570,6 +566,29 @@ const Cards = () => {
         </Stack>
       </Container>
       {/* QR-container-ends */}
+
+      <CustomModal
+        show={QRShow}
+        handleShow={handleShow}
+        handleClose={handleClose}
+      >
+        <Modal.Body>
+          <QRCode
+            // size={150}
+            style={{
+              height: '80vh',
+              width: '40vw',
+            }}
+            value={JSON.stringify(formValue)}
+            viewBox={`0 0 256 256`}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button style={{ width: '100%' }} size="lg" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </CustomModal>
     </>
   );
 };

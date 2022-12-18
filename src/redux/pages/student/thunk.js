@@ -11,75 +11,11 @@ const config = {
   },
 };
 
-export const adminThunk = {
-  /**
-   * Faculty Thunk START
-   */
-  createFaculty: createAsyncThunk('admin/createFaculty', async (formData) => {
-    const { data } = await axios.post(
-      `${BASE_URL}/api/teacher/create-teacher`,
-      formData
-    );
-    console.log('create faculty api succesful data is ====>', data);
-    return data;
-  }),
-  getFacultyList: createAsyncThunk('admin/facultyList', async () => {
-    //
-    const { data } = await axios.get(
-      `${BASE_URL}/api/teacher/get-teacher`
-      // config
-    );
-
-    return data;
-  }),
-  getFacultyDetails: createAsyncThunk('admin/facultyDetail', async (id) => {
-    const { data } = await axios.get(
-      `${BASE_URL}api/teacher/get-teacher/${id}`
-      // config
-    );
-    console.log('Faculty  detail', data);
-    return data;
-  }),
-  updateFacultyDetail: createAsyncThunk(
-    'admin/updateFacultyDetail',
-    async (formData) => {
-      console.log('inside thunk values are====>', formData);
-      const { id } = formData;
-      const { data } = await axios.put(
-        `${BASE_URL}/api/teacher/update-teacher/${id}`,
-        {
-          faculty_name: 'teacher123',
-          contact_number: 6596568468468,
-          email_address: 'teacher123@gmail.com',
-          father_name: 'father123',
-          home_address: 'xyz123',
-          designation: 'Ass.Teacher123',
-          qualifications: ['B.com', 'B.A', 'M.com', 'BBA'],
-          subjects: ['Maths', 'English', 'Physics'],
-          course: [],
-          semester: ['Sem-1', 'Sem-2'],
-        }
-      );
-      console.log(' faculty update api succesful data is ====>', data);
-      return data;
-    }
-  ),
-  deleteFaculty: createAsyncThunk('admin/deleteFaculty', async (id) => {
-    const res = await axios.delete(
-      `${BASE_URL}/api/teacher/get-teacher/${id}`
-      // config
-    );
-    console.log('Faculty  detail', res);
-    return res;
-  }),
-  /**
-   * ################# Faculty Thunk END #######################
-   */
-
+export const studentThunk = {
   /**
    * ########################### STUDENT Thunk START ##############################
    */
-  createStudent: createAsyncThunk('admin/createStudent', async (formData) => {
+  createStudent: createAsyncThunk('student/createStudent', async (formData) => {
     // const {
     //   student_name,
     //   student_id,
@@ -101,7 +37,7 @@ export const adminThunk = {
     );
     return data;
   }),
-  getStudentList: createAsyncThunk('admin/StudentList', async () => {
+  getStudentList: createAsyncThunk('student/StudentList', async () => {
     const { data } = await axios.get(
       `${BASE_URL}/api/student/get-student`
       // config
@@ -109,7 +45,7 @@ export const adminThunk = {
 
     return data.data;
   }),
-  getStudentDetails: createAsyncThunk('admin/StudentDetails', async (id) => {
+  getStudentDetails: createAsyncThunk('student/StudentDetails', async (id) => {
     const { data } = await axios.get(
       `${BASE_URL}api/student/get-single-student/${id}`
       // config
@@ -118,7 +54,7 @@ export const adminThunk = {
     return data;
   }),
   updateStudentDetail: createAsyncThunk(
-    'admin/updateStudentDetail',
+    'student/updateStudentDetail',
     async (formData) => {
       console.log('inside thunk values are====>', formData);
       const {
@@ -159,7 +95,7 @@ export const adminThunk = {
       return data;
     }
   ),
-  deleteStudent: createAsyncThunk('admin/deleteStudent', async (id) => {
+  deleteStudent: createAsyncThunk('student/deleteStudent', async (id) => {
     const res = await axios.delete(
       `${BASE_URL}/api/student/delete-student/${id}`
       // config
@@ -189,20 +125,21 @@ export const adminThunk = {
       return data;
     }
   ),
-  getAttendanceList: createAsyncThunk('admin/AttendanceList', async () => {
+  getAttendanceList: createAsyncThunk('student/AttendanceList', async () => {
     //
+
     const { data } = await axios.get(
-      `${BASE_URL}api/attendance/get-attendance`
+      `${BASE_URL}/api/studentAttendance/get-student-attendance`
       // config
     );
-    console.log('attendance  list', data);
+
     return data;
   }),
   getAttendanceDetail: createAsyncThunk(
-    'admin/AttendanceDetail',
+    'student/AttendanceDetail',
     async (id) => {
       const { data } = await axios.get(
-        `${BASE_URL}api/attendance/get-single-attendance/${id}`
+        `${BASE_URL}/api/attendance/get-single-attendance/${id}`
         // config
       );
       console.log('Attendance  detail', data);
@@ -210,22 +147,20 @@ export const adminThunk = {
     }
   ),
   updateAttendance: createAsyncThunk(
-    'admin/updateAttendance',
+    'student/updateAttendance',
     async (formData) => {
-      console.log('inside thunk values are====>', formData);
-      const { id } = formData;
+      const { id, status } = formData;
       const { data } = await axios.put(
-        `${BASE_URL}/api/attendance/update-attendance/${id}`,
+        `${BASE_URL}/api/studentAttendance/update-student-attendance/${id}`,
         {
-          student_id: '633290db1fb408ac9d48b364',
-          is_present: false,
+          student_id: id,
+          is_present: status,
         }
-      );
-      console.log(' attendance update api succesful data is ====>', data);
+      );  
       return data;
     }
   ),
-  deleteAttendance: createAsyncThunk('admin/deleteAttendance', async (id) => {
+  deleteAttendance: createAsyncThunk('student/deleteAttendance', async (id) => {
     const res = await axios.delete(
       `${BASE_URL}/api/attendance/delete-attendance/${id}`
       // config
@@ -236,20 +171,4 @@ export const adminThunk = {
   /**
    * ########################### ATTENDANCE Thunk END ##############################
    */
-  createEvent: createAsyncThunk('admin/createEvent', async (formData) => {
-    console.log('inside thunk values are====>', formData);
-    // const {file,Event_name,Event_type,Select_Date,Select_time,Detail} = formData;
-    const json = JSON.stringify(formData);
-    const blob = new Blob([json]);
-    console.log('check blob', blob);
-    // const { data } = await axios.post(
-    //   `${BASE_URL}/api/eventTeacher/create-teacher-event`, ,{
-    // headers: {
-    //   'Content-Type': 'multipart/form-data'
-    // }
-
-    // );
-    // console.log('Create Attendance api succesful data is ====>', data);
-    // return data;
-  }),
 };

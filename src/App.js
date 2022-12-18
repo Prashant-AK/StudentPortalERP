@@ -144,6 +144,16 @@ function App() {
               }
             />
             <Route
+              path="/create-faculty-profile/:facultyId"
+              element={
+                <>
+                  <SideBar />
+                  <Header />
+                  <FacultyProfileForm />
+                </>
+              }
+            />
+            <Route
               path="/class-schedule"
               element={
                 <>

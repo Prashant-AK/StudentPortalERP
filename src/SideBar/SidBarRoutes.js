@@ -80,7 +80,7 @@ export const SideBarRoutes = {
   Student: [],
   Teacher: [
     {
-      path: '/teacher',
+      path: '/teacher/dashboard',
       name: 'Dashboard',
       icon: <FaHome />,
     },

@@ -842,12 +842,29 @@ main {
   color: black;
   background: transparent !important;
   background-color: transparent !important;
+  outline: none !important;
 }
 
 .dropdown-toggle:hover {
   color: black !important;
+  outline: none !important;
 }
-
+.dropdown-toggle::after {
+  color: black !important;
+  outline: none !important;
+}
+.show > .btn-secondary.dropdown-toggle {
+  text-decoration: none;
+  border: none;
+  font-weight: bolder;
+  color: black;
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: none !important;
+}
+.btn-secondary:focus {
+  color: black !important;
+}
 .react-date-picker__wrapper {
   border: none !important;
   color: white;

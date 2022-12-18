@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Col, Button, Row, Form } from 'react-bootstrap';
 import Multiselect from 'multiselect-react-dropdown';
 import { customAlphabet } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
 import Banner from '../topBar/HeaderBanner/Banner';
 import classes from './FacultProfileForm.module.css';
-import { adminThunk } from '../../redux/pages';
+import { facultyThunk } from '../../redux/pages';
 
 const nanoid = customAlphabet('1234567890', 10);
 
@@ -26,7 +26,7 @@ const SEMESTER = [
   { name: 'Semester 3', check: 'semester', id: 3 },
 ];
 const initialState = {
-  teacher_id: nanoid(8),
+  teacher_uId: nanoid(8),
   faculty_name: '',
   contact_number: '',
   email_address: '',
@@ -43,8 +43,36 @@ const initialState = {
 function FacultyProfileForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { facultyId } = useParams();
   const [errors, setErrors] = useState({});
+  const { state } = useLocation();
   const [formValues, setFormValues] = useState(initialState);
+  const { loading, data, error } = useSelector((state) => state.facultyState);
+  useEffect(() => {
+    if (!loading && data?.is_success) {
+      setFormValues(initialState);
+      setErrors({});
+      navigate('/student-profile');
+    }
+    // if (error) {
+    //   alert('Something went wrong');
+    //   navigate('/student-profile');
+    // }
+    return () => {
+      // setLoaded(false)
+    };
+  }, [loading, data, error]);
+  console.log(loading, data, error);
+  useEffect(() => {
+    if (facultyId) {
+      // dispatch(adminThunk.getStudentDetails(studentId))
+      console.log('state is', state);
+      setFormValues(state);
+    }
+    return () => {
+      console.log('return');
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +92,7 @@ function FacultyProfileForm() {
       setFormValues({ ...formValues, semester: arr });
       if (!!errors['semester']) setErrors({ ...errors, semester: null });
     }
+    console.log('on select function', selectedList);
   }
 
   function onRemove(selectedList, removedItem) {
@@ -79,7 +108,7 @@ function FacultyProfileForm() {
 
   const validateForm = () => {
     const {
-      teacher_id,
+      teacher_uId,
       faculty_name,
       contact_number,
       email_address,
@@ -128,34 +157,14 @@ function FacultyProfileForm() {
 
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
+      // console.log('facutly form created', formValues);
     } else {
+      if (!facultyId) await dispatch(facultyThunk.createFaculty(formValues));
+      else await dispatch(facultyThunk.updateFacultyDetail(formValues));
     }
-
-    // const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault();
-
-    // }
-    // if (form.checkValidity() === false) {
-    // console.log('errrorrr');
-    // alert('Please fill all the fields');
-    // } else {
-    // setValidated(true);
-
-    // await dispatch(
-    //   adminThunk.createEvent({ ...formValues, file: uploadImage })
-    // );
-
-    // console.log(
-    //   'submit form ',
-    //   // file: uploadImage,
-    //   form_Data.get('')
-    // );
-    // navigate('/events');
-    // }
   };
   const {
-    teacher_id,
+    teacher_uId,
     faculty_name,
     contact_number,
     email_address,
@@ -165,6 +174,7 @@ function FacultyProfileForm() {
     city,
     designation,
     qualifications,
+    subjects,
   } = formValues;
 
   return (
@@ -200,7 +210,7 @@ function FacultyProfileForm() {
               </Form.Group>
               <Form.Group className="w-50" controlId="validationCustom02">
                 <Form.Label>Faculty ID</Form.Label>
-                <Form.Control name="teacher_id" value={teacher_id} />
+                <Form.Control name="teacher_uId" value={teacher_uId} />
               </Form.Group>
               <Form.Group className="w-50" controlId="contact_number">
                 <Form.Label>Contact Number</Form.Label>
@@ -346,6 +356,7 @@ function FacultyProfileForm() {
                   onSelect={onSelect}
                   onRemove={onRemove}
                   displayValue="name"
+                  // selectedValues={subjects}
                 />
                 <Form.Control.Feedback
                   className={`${!!errors?.subjects && 'errorText'}`}

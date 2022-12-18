@@ -31,7 +31,7 @@ const initialState = {
 function StudentProfileForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let { studentId } = useParams();
+  const { studentId } = useParams();
   const { state } = useLocation();
   const [formValues, setformValues] = useState(initialState);
   const [errors, setErrors] = useState({});
@@ -43,15 +43,15 @@ function StudentProfileForm() {
       setErrors({});
       navigate('/student-profile');
     }
-    if (error) {
-      alert('Something went wrong');
-      navigate('/student-profile');
-    }
+    // if (error) {
+    //   alert('Something went wrong');
+    //   navigate('/student-profile');
+    // }
     return () => {
       // setLoaded(false)
     };
   }, [loading, data, error]);
-  console.log(loading, data, error);
+  // console.log(loading, data, error);
   useEffect(() => {
     if (studentId) {
       // dispatch(adminThunk.getStudentDetails(studentId))
